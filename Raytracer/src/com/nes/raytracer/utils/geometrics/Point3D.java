@@ -133,4 +133,10 @@ public final class Point3D {
 		
 		return (this.x == point.x && this.y == point.y && this.z == point.z );
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "("+this.x+", "+this.y+", "+this.z+")";
+	}
 }

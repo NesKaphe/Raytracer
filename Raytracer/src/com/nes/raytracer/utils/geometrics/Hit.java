@@ -28,7 +28,7 @@ public final class Hit {
 	
 	
 	public double getDistanceFrom(Point3D point) {
-		return new Vector3D(this.point.getX() - point.getX(), this.point.getY() - point.getY(), this.point.getZ() - point.getZ()).getLength();
+		return new Vector3D(this.point, point).getLength();
 	}
 	
 	

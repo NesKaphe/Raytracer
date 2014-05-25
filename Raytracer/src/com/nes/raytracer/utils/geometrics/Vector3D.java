@@ -226,4 +226,10 @@ public final class Vector3D {
 		
 		return (this.x == vect.x && this.y == vect.y && this.z == vect.z );
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "("+this.x+", "+this.y+", "+this.z+")";
+	}
 }

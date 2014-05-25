@@ -39,11 +39,14 @@ public class SphereGeometry implements Geometry {
 		double t = result.getMin();
 		
 		
-		Point3D intersection = rayOrigin.copy().translate(rayDirection.scale(t));
-		
-		if(intersection.getZ() < rayOrigin.getZ()) {
-			return Hit.HitMissed();
+		if(t <= 0) {
+			t = result.getMax();
+			if (t <= 0) {
+				return Hit.HitMissed();
+			}
 		}
+		
+		Point3D intersection = rayOrigin.copy().translate(rayDirection.scale(t));
 		
 		return new Hit(true, intersection);
 	}
@@ -54,15 +57,33 @@ public class SphereGeometry implements Geometry {
 		 * To get the normal vector we will need to get the vector 
 		 * from the center of the sphere and point provided
 		 */
-		Vector3D normal = new Vector3D(
-									 this.center.getX() - point.getX(), 
-									 this.center.getY() - point.getY(), 
-									 this.center.getZ() - point.getZ()
-									 );
+		Vector3D normal = new Vector3D(this.center, point);
 		
 		//Then we have to normalize the vector
 		normal.normalize();
 		
 		return normal;
-	}	
+	}
+	
+	
+	@Override
+	public boolean isOnSurface(Point3D point) {
+		return new Vector3D(this.center, point).getLength() == Math.pow(this.radius, 2);
+	}
+	
+	
+	@Override
+	public boolean equals(Object object) {
+		if( this == object) {
+			return true;
+		}
+		
+		if (!(object instanceof SphereGeometry)) {
+			return false;
+		}
+		
+		SphereGeometry geo = (SphereGeometry) object;
+		
+		return this.center.equals(geo.center) && this.radius == geo.radius;
+	}
 }

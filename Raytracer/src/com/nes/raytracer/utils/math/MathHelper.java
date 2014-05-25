@@ -39,6 +39,8 @@ public class MathHelper {
 		
 		public double getMin();
 		
+		public double getMax();
+		
 	}
 	
 	
@@ -64,6 +66,12 @@ public class MathHelper {
 		public double getX2() {
 			return this.x2;
 		}
+		
+		
+		public double getMax() {
+			return Math.max(this.x1, this.x2);
+		}
+		
 		
 		public double getMin() {
 			return Math.min(this.x1,  this.x2);

@@ -23,4 +23,11 @@ public interface Geometry {
 	 */
 	public Vector3D getNormal(Point3D point);
 	
+	
+	/**
+	 * Will return if the given point is on the surface of the object
+	 * @param point the point we are testing
+	 * @return bool true if the point is on the surface of the object and false in the other case
+	 */
+	public boolean isOnSurface(Point3D point);
 }
