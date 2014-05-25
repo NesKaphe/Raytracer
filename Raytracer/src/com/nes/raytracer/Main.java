@@ -23,5 +23,7 @@ public class Main {
 		else {
 			System.out.println("Le rayon n'a pas touché la sphere");
 		}
+		
+		Number n = new Double(5);
 	}
 }

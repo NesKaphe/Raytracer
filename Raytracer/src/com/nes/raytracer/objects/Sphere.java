@@ -25,7 +25,9 @@ public class Sphere extends AbstractObject implements SceneObject {
 	
 	@Override
 	public Color getColor(Point3D point) throws NotOnSurfaceException {
-		
+		if (!this.geometry.isOnSurface(point)) {
+			throw new NotOnSurfaceException();
+		}
 		return null;
 	}
 }
