@@ -1,4 +1,4 @@
-package com.nes.raytracer.camera;
+package com.nes.raytracer.view;
 
 import java.awt.Dimension;
 

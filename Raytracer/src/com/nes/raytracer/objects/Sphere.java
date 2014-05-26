@@ -24,10 +24,23 @@ public class Sphere extends AbstractObject implements SceneObject {
 
 	
 	@Override
+	public Material getMaterial() {
+		return this.material;
+	}
+	
+	
+	public boolean isOnSurface(Point3D point) {
+		return this.geometry.isOnSurface(point);
+	}
+	/*
+	 * 
+
+	@Override
 	public Color getColor(Point3D point) throws NotOnSurfaceException {
 		if (!this.geometry.isOnSurface(point)) {
 			throw new NotOnSurfaceException();
 		}
 		return null;
 	}
+	 */
 }

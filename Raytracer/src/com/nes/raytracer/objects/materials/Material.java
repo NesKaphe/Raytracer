@@ -12,19 +12,20 @@ public class Material {
 	
 	//TODO: implement an opacity property to handle refraction and reflexion properly
 	
-	protected Material(ColorProperties emissive) {
+	
+	public Material(ColorProperties emissive) {
 		this.emissive = emissive;
 	}
 	
 	
-	protected Material(ColorProperties ambient, ColorProperties diffuse, ColorProperties specular) {
+	public Material(ColorProperties ambient, ColorProperties diffuse, ColorProperties specular) {
 		this.ambient = ambient;
 		this.diffuse = diffuse;
 		this.specular = specular;
 	}
 	
 	
-	protected Material(ColorProperties ambient, ColorProperties diffuse, ColorProperties specular, ColorProperties emissive) {
+	public Material(ColorProperties ambient, ColorProperties diffuse, ColorProperties specular, ColorProperties emissive) {
 		this.ambient = ambient;
 		this.diffuse = diffuse;
 		this.specular = specular;

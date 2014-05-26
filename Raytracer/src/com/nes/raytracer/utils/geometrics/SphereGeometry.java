@@ -20,8 +20,7 @@ public class SphereGeometry implements Geometry {
 	public Hit intersection(Ray ray) {
 		Vector3D rayDirection = ray.getDirection().normalize();
 		Point3D rayOrigin = ray.getOrigin();
-		Vector3D centerToPOV = new Vector3D(this.center, rayOrigin);
-		
+		Vector3D centerToPOV = new Vector3D(this.center, rayOrigin);		
 		
 		double a = rayDirection.dot(rayDirection);
 		double b = 2 * rayDirection.dot(centerToPOV);
@@ -68,7 +67,7 @@ public class SphereGeometry implements Geometry {
 	
 	@Override
 	public boolean isOnSurface(Point3D point) {
-		return new Vector3D(this.center, point).getLength() == Math.pow(this.radius, 2);
+		return (double) Math.round(new Vector3D(this.center, point).getLength()) == this.radius;
 	}
 	
 	

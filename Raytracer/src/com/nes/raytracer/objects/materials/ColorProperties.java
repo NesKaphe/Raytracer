@@ -1,6 +1,12 @@
 package com.nes.raytracer.objects.materials;
 
+import java.awt.Color;
+
 public class ColorProperties {
+	
+	private static final double MIN_RANGE = 0;
+	private static final double MAX_RANGE = 1;
+	
 	
 	private final double redProperty;
 	private final double greenProperty;
@@ -18,6 +24,12 @@ public class ColorProperties {
 		this(cp.redProperty, cp.greenProperty, cp.blueProperty);
 	}
 	
+	
+	public ColorProperties copy() {
+		return new ColorProperties(this);
+	}
+	
+	
 	public double getRedProperty() {
 		return this.redProperty;
 	}
@@ -33,11 +45,22 @@ public class ColorProperties {
 	}
 	
 	
+	public Color getColorFrom(Color c) {
+		int red = (int) (c.getRed() * this.redProperty);
+		int green = (int) (c.getGreen() * this.greenProperty);
+		int blue = (int) (c.getBlue() * this.blueProperty);
+		
+		return new Color(red < 0 ? 0 : red,
+						 green < 0 ? 0 : green,
+						 blue < 0 ? 0 : blue);
+	}
+	
+	
 	private double setInRange(double property) {
-		if(property < 0) {
+		if(property < ColorProperties.MIN_RANGE) {
 			return 0;
 		}
-		if(property > 1) {
+		if(property > ColorProperties.MAX_RANGE) {
 			return 1;
 		}
 		
@@ -60,10 +83,5 @@ public class ColorProperties {
 		return 	this.redProperty == cp.redProperty
 				&& this.greenProperty == cp.greenProperty
 				&& this.blueProperty == cp.blueProperty;
-	}
-	
-	
-	public ColorProperties copy() {
-		return new ColorProperties(this);
 	}
 }
