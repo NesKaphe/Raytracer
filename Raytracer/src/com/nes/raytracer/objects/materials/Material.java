@@ -22,6 +22,7 @@ public class Material {
 		this.ambient = ambient;
 		this.diffuse = diffuse;
 		this.specular = specular;
+		this.emissive = new ColorProperties(0, 0, 0);
 	}
 	
 	

@@ -7,6 +7,8 @@ package com.nes.raytracer.utils.geometrics;
  */
 public class Ray {
 
+	public static final int MAX_BOUNCES = 5;
+	
 	private final Point3D origin;
 	private final Vector3D direction;
 	

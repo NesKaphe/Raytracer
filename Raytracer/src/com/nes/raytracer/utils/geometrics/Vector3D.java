@@ -113,6 +113,14 @@ public final class Vector3D {
 	}
 	
 	
+	public Vector3D crossProduct(Vector3D vect) {
+		this.x = this.y * vect.z - vect.y * this.z;
+		this.y = vect.x * this.z - vect.z * this.x;
+		this.z = this.x * vect.y - vect.x * this.y;
+		return this;
+	}
+	
+	
 	/**
 	 * Will multiply the vector by a scale
 	 * @param scale coefficient

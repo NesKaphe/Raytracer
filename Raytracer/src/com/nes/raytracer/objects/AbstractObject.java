@@ -1,8 +1,10 @@
 package com.nes.raytracer.objects;
 
+import com.nes.raytracer.objects.materials.ColorProperties;
 import com.nes.raytracer.objects.materials.Material;
 import com.nes.raytracer.utils.geometrics.Geometry;
 import com.nes.raytracer.utils.geometrics.Point3D;
+import com.nes.raytracer.utils.geometrics.Vector3D;
 
 public abstract class AbstractObject {
 
@@ -19,6 +21,20 @@ public abstract class AbstractObject {
 	
 	public Point3D getPosition() {
 		return this.position;
+	}
+	
+	
+	public boolean isEmittingLight() {
+		ColorProperties cp = this.material.getEmissive();
+		
+		return cp.getRedProperty() > 0
+				|| cp.getBlueProperty() > 0
+				|| cp.getGreenProperty() > 0;
+	}
+	
+	
+	public Vector3D getNormalTo(Point3D intersection) {
+		return this.geometry.getNormal(intersection);
 	}
 	
 	

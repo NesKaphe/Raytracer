@@ -1,13 +1,12 @@
 package com.nes.raytracer.objects;
 
-import java.awt.Color;
-
 import com.nes.raytracer.objects.materials.Material;
 import com.nes.raytracer.utils.exceptions.NotOnSurfaceException;
 import com.nes.raytracer.utils.geometrics.Hit;
 import com.nes.raytracer.utils.geometrics.Point3D;
 import com.nes.raytracer.utils.geometrics.Ray;
 import com.nes.raytracer.utils.geometrics.SphereGeometry;
+import com.nes.raytracer.utils.geometrics.Vector3D;
 
 public class Sphere extends AbstractObject implements SceneObject {
 
@@ -32,15 +31,15 @@ public class Sphere extends AbstractObject implements SceneObject {
 	public boolean isOnSurface(Point3D point) {
 		return this.geometry.isOnSurface(point);
 	}
-	/*
-	 * 
 
-	@Override
-	public Color getColor(Point3D point) throws NotOnSurfaceException {
-		if (!this.geometry.isOnSurface(point)) {
-			throw new NotOnSurfaceException();
-		}
-		return null;
+	
+	public Ray getReflectedRay(Ray ray, Point3D intersection) {
+		
+		Vector3D normal = this.geometry.getNormal(intersection);
+		Vector3D direction = ray.getDirection();
+		
+		Vector3D substract = normal.copy().scale(2*normal.dot(direction));
+		
+		return new Ray(intersection, direction.difference(substract));
 	}
-	 */
 }
