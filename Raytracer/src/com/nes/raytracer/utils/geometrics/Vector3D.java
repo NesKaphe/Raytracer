@@ -113,6 +113,12 @@ public final class Vector3D {
 	}
 	
 	
+	/**
+	 * Will do the cross product with the given vector
+	 * @param vect a Vector3D
+	 * @return vect the vector itself
+	 * @since 1.0
+	 */
 	public Vector3D crossProduct(Vector3D vect) {
 		this.x = this.y * vect.z - vect.y * this.z;
 		this.y = vect.x * this.z - vect.z * this.x;

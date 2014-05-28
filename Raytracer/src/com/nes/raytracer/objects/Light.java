@@ -22,4 +22,8 @@ public class Light extends Sphere {
 			  ));
 	}
 
+	
+	public boolean isVisible() {
+		return false;
+	}
 }

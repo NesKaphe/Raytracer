@@ -14,15 +14,12 @@ public class Material {
 	
 	
 	public Material(ColorProperties emissive) {
-		this.emissive = emissive;
+		this(new ColorProperties(0, 0, 0), new ColorProperties(0, 0, 0), new ColorProperties(0, 0, 0), emissive);
 	}
 	
 	
 	public Material(ColorProperties ambient, ColorProperties diffuse, ColorProperties specular) {
-		this.ambient = ambient;
-		this.diffuse = diffuse;
-		this.specular = specular;
-		this.emissive = new ColorProperties(0, 0, 0);
+		this(ambient, diffuse, specular, new ColorProperties(0, 0, 0));
 	}
 	
 	

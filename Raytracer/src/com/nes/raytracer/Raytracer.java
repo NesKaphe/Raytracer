@@ -110,6 +110,11 @@ public class Raytracer {
 			}
 			
 			//And now the specular
+			ColorProperties specularProperty = closest.getMaterial().getSpecular();
+			if (specularProperty.getRedProperty() > 0 || specularProperty.getGreenProperty() > 0 || specularProperty.getBlueProperty() > 0) {
+				Ray reflectedRay = closest.getReflectedRay(ray, hit.getIntersection());
+				specularColor = specularProperty.getColorFrom(this.compute(reflectedRay, bounces - 1));
+			}
 			
 			finalColor = this.combineColors(ambientColor, diffuseColor, specularColor);
 			//System.out.println(ambientColor+" ; "+finalColor);

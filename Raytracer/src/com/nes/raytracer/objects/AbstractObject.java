@@ -38,6 +38,10 @@ public abstract class AbstractObject {
 	}
 	
 	
+	public boolean isVisible() {
+		return true;
+	}
+	
 	@Override
 	public boolean equals(Object object) {
 		if(this == object) {

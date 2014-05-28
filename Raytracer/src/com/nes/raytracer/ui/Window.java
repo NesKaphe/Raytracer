@@ -10,7 +10,7 @@ public class Window extends JFrame {
 	private DrawSurface surface;
 	
 	public Window() {
-		super("Raytracer by Alain DIAS");
+		super("Raytracer by Nes Kaphe");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		

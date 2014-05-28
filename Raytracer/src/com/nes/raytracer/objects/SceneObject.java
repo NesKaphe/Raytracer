@@ -30,6 +30,8 @@ public interface SceneObject {
 	public Vector3D getNormalTo(Point3D intersection);
 	
 	
+	public boolean isVisible();
+	
 	/*
 	 * TODO: maybe remove this 
 	public Color getColor(Point3D point) throws NotOnSurfaceException;
