@@ -1,5 +1,7 @@
 package com.nes.raytracer.objects.materials;
 
+import com.nes.raytracer.utils.colors.ColorProperties;
+
 public class Material {
 
 	private ColorProperties ambient;

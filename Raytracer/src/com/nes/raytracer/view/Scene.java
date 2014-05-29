@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import com.nes.raytracer.objects.SceneObject;
-import com.nes.raytracer.objects.materials.ColorProperties;
+import com.nes.raytracer.utils.colors.ColorProperties;
 
 public class Scene {
 

@@ -1,4 +1,4 @@
-package com.nes.raytracer.objects.materials;
+package com.nes.raytracer.utils.colors;
 
 import java.awt.Color;
 

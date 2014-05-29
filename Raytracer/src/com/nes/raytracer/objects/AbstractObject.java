@@ -1,9 +1,10 @@
 package com.nes.raytracer.objects;
 
-import com.nes.raytracer.objects.materials.ColorProperties;
 import com.nes.raytracer.objects.materials.Material;
+import com.nes.raytracer.utils.colors.ColorProperties;
 import com.nes.raytracer.utils.geometrics.Geometry;
 import com.nes.raytracer.utils.geometrics.Point3D;
+import com.nes.raytracer.utils.geometrics.Ray;
 import com.nes.raytracer.utils.geometrics.Vector3D;
 
 public abstract class AbstractObject {
@@ -41,6 +42,18 @@ public abstract class AbstractObject {
 	public boolean isVisible() {
 		return true;
 	}
+	
+	
+	public Ray getReflectedRay(Ray ray, Point3D intersection) {
+		
+		Vector3D normal = this.geometry.getNormal(intersection);
+		Vector3D direction = ray.getDirection();
+		
+		Vector3D substract = normal.copy().scale(2*normal.dot(direction));
+
+		return new Ray(intersection, direction.difference(substract));
+	}
+	
 	
 	@Override
 	public boolean equals(Object object) {

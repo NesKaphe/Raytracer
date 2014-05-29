@@ -2,8 +2,8 @@ package com.nes.raytracer.objects;
 
 import java.awt.Color;
 
-import com.nes.raytracer.objects.materials.ColorProperties;
 import com.nes.raytracer.objects.materials.Material;
+import com.nes.raytracer.utils.colors.ColorProperties;
 import com.nes.raytracer.utils.geometrics.Point3D;
 
 public class Light extends Sphere {

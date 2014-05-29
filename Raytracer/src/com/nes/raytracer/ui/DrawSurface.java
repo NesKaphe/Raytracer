@@ -15,7 +15,7 @@ public class DrawSurface extends JPanel {
 	
 	public DrawSurface() {
 		super();
-		this.setPreferredSize(new Dimension(1920,1080));
+		this.setPreferredSize(new Dimension(1600,900));
 		this.setBackground(Color.white);
 	}
 	

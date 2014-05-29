@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import com.nes.raytracer.objects.SceneObject;
-import com.nes.raytracer.objects.materials.ColorProperties;
-import com.nes.raytracer.utils.exceptions.NotOnSurfaceException;
+import com.nes.raytracer.utils.colors.ColorProperties;
+import com.nes.raytracer.utils.colors.RayColor;
 import com.nes.raytracer.utils.geometrics.Hit;
 import com.nes.raytracer.utils.geometrics.Point3D;
 import com.nes.raytracer.utils.geometrics.Ray;
@@ -44,11 +44,10 @@ public class Raytracer {
 				double y = ((double)(2*j - this.camera.getHeight()) / this.camera.getHeight()) * yAxis;
 
 				Point3D point = new Point3D(x, y, 0);
-				
+
 				point.translate(this.camera.getTarget());
-				
+
 				Ray ray = new Ray(point, new Vector3D(this.camera.getPosition(), point));
-				
 				Color pixel = this.compute(ray);
 				
 				g.setColor(pixel);
@@ -65,78 +64,85 @@ public class Raytracer {
 	
 	
 	private Color compute(Ray ray, int bounces) {
-		Color finalColor = Color.black;
-		SceneObject closest = this.getClosest(ray);
+		RayColor rayColor = new RayColor();
 		
-		if(closest != null) { //If we found an object
-			ColorProperties ambient = closest.getMaterial().getAmbient();
-			Color ambientColor = ambient.getColorFrom(this.scene.getAmbientColor());
-			Color diffuseColor = Color.black;
-			Color specularColor = Color.black;
-			//Now we're going to look for the diffuse color
-			Hit hit = closest.intersection(ray);
-
-			hit.getIntersection().translate(closest.getNormalTo(hit.getIntersection()).scale(0.000000000001));
+		if(bounces > 0) {
+		
+			SceneObject closest = this.getClosest(ray);
 			
-			for(SceneObject nextObject : this.scene.getSceneObjects()) {
+			if(closest != null) { //If we found an object
 				
-				if(nextObject.isEmittingLight() && !nextObject.equals(closest)) {
-					if(this.isLightVisible(hit.getIntersection())) {
-						Vector3D direction = new Vector3D(hit.getIntersection(), nextObject.getPosition());
-						double distance = direction.getLength();
-											
-						double cos = direction.normalize().copy().dot(closest.getNormalTo(hit.getIntersection()));
+				Hit hit = closest.intersection(ray);
+
+				hit.getIntersection().translate(closest.getNormalTo(hit.getIntersection()).scale(0.000000000001));
+
+				
+				rayColor.add(this.computeAmbientColor(closest));
+				rayColor.add(this.computeDiffuseColor(closest, hit.getIntersection()));
+				rayColor.add(this.computeSpecularColor(closest, ray, hit.getIntersection(), bounces));
+			}
+		}
+		
+		return rayColor.toColor();
+	}
+	
+	
+	private Color computeAmbientColor(SceneObject object) {
+		ColorProperties ambient = object.getMaterial().getAmbient();
+		
+		return ambient.getColorFrom(this.scene.getAmbientColor());
+	}
+	
+	
+	private Color computeDiffuseColor(SceneObject object, Point3D intersectionPoint) {
+		
+		RayColor rayColor = new RayColor();
+		
+				
+		for(SceneObject nextObject : this.scene.getSceneObjects()) {
+			
+			if(nextObject.isEmittingLight() && !nextObject.equals(object)) {
+				if(this.isLightVisible(intersectionPoint)) {
+					Vector3D direction = new Vector3D(intersectionPoint, nextObject.getPosition());
+					double distance = direction.getLength();
+										
+					double cos = direction.normalize().copy().dot(object.getNormalTo(intersectionPoint));
+					
+					if(cos > 0) {
+						ColorProperties diffuseProperty = object.getMaterial().getDiffuse();
+						ColorProperties emissivityProperty = nextObject.getMaterial().getEmissive();
 						
-						if(cos > 0) {
-							ColorProperties diffuseProperty = closest.getMaterial().getDiffuse();
-							ColorProperties emissivityProperty = nextObject.getMaterial().getEmissive();
-							
-							Color emissiveColor = emissivityProperty.getColorFrom(new Color(255,255,255));
-							
-							diffuseColor = diffuseProperty.getColorFrom(emissiveColor);
-							
-							int red = (int) ((cos *diffuseColor.getRed()) / (distance/5));
-							int green = (int) ((cos * diffuseColor.getGreen()) / (distance/5));
-							int blue = (int) ((cos * diffuseColor.getBlue()) / (distance/5));
-							
-							red = red > 255 ? 255 : red;
-							green = green > 255 ? 255 : green;
-							blue = blue > 255 ? 255 : blue;
-							
-							diffuseColor = new Color(red, green, blue);
-						}
+						Color emissiveColor = emissivityProperty.getColorFrom(new Color(255,255,255));
+						
+						Color diffuseColor = diffuseProperty.getColorFrom(emissiveColor);
+						
+						int red = (int) ((cos *diffuseColor.getRed()));// / (distance/5));
+						int green = (int) ((cos * diffuseColor.getGreen()));// / (distance/5));
+						int blue = (int) ((cos * diffuseColor.getBlue()));// / (distance/5));
+						
+						
+						
+						rayColor.add(red, green, blue);
 					}
 				}
 			}
-			
-			//And now the specular
-			ColorProperties specularProperty = closest.getMaterial().getSpecular();
-			if (specularProperty.getRedProperty() > 0 || specularProperty.getGreenProperty() > 0 || specularProperty.getBlueProperty() > 0) {
-				Ray reflectedRay = closest.getReflectedRay(ray, hit.getIntersection());
-				specularColor = specularProperty.getColorFrom(this.compute(reflectedRay, bounces - 1));
-			}
-			
-			finalColor = this.combineColors(ambientColor, diffuseColor, specularColor);
-			//System.out.println(ambientColor+" ; "+finalColor);
 		}
 		
-		return finalColor;
+		return rayColor.toColor();
 	}
 	
 	
-	private Color combineColors(Color ambientColor, Color diffuseColor, Color specularColor) {
+	private Color computeSpecularColor(SceneObject object, Ray ray, Point3D intersectionPoint, int bounces) {
+		ColorProperties specularProperty = object.getMaterial().getSpecular();
+		RayColor rayColor = new RayColor();
 		
-		int red = ambientColor.getRed()+diffuseColor.getRed()+specularColor.getRed();
-		int green = ambientColor.getGreen()+diffuseColor.getGreen()+specularColor.getGreen();
-		int blue = ambientColor.getBlue()+diffuseColor.getBlue()+specularColor.getBlue();
-		
-		red = red > 255 ? 255 : red;
-		green = green > 255 ? 255 : green;
-		blue = blue > 255 ? 255 : blue;
-		
-		return new Color(red, green, blue);
+		if (specularProperty.getRedProperty() > 0 || specularProperty.getGreenProperty() > 0 || specularProperty.getBlueProperty() > 0) {
+			Ray reflectedRay = object.getReflectedRay(ray, intersectionPoint);
+			rayColor.add(specularProperty.getColorFrom(this.compute(reflectedRay, bounces - 1)));
+			rayColor.attenuate(Ray.MAX_BOUNCES - bounces + 1);
+		}
+		return rayColor.toColor();
 	}
-
 
 	private SceneObject getClosest(Ray ray) {
 		ArrayList<SceneObject> listObjects = this.scene.getSceneObjects();
@@ -171,6 +177,7 @@ public class Raytracer {
 			if(so.isEmittingLight()) {
 				//We'll construct a ray from the point to the center of the object
 				Vector3D direction = new Vector3D(hitPoint, so.getPosition());
+				
 				direction.normalize();
 				
 				Ray ray = new Ray(hitPoint, direction);

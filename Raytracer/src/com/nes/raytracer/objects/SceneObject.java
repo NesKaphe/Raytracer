@@ -1,7 +1,6 @@
 package com.nes.raytracer.objects;
 
 import com.nes.raytracer.objects.materials.Material;
-import com.nes.raytracer.utils.exceptions.NotOnSurfaceException;
 import com.nes.raytracer.utils.geometrics.Hit;
 import com.nes.raytracer.utils.geometrics.Point3D;
 import com.nes.raytracer.utils.geometrics.Ray;
@@ -31,6 +30,7 @@ public interface SceneObject {
 	
 	
 	public boolean isVisible();
+	
 	
 	/*
 	 * TODO: maybe remove this 
